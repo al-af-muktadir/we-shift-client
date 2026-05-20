@@ -1,0 +1,59 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes:
+    black --default,
+    
+  root: ":root";
+}
+.custom-slider {
+  height: 420px;
+}
+
+.custom-slider .awssld__content {
+  background-color: #1e1e1e;
+}
+
+.custom-slider .awssld__content > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.custom-slider .awssld__bullets {
+  bottom: 18px;
+}
+
+.custom-slider .awssld__bullets button {
+  background: #8a9a5b;
+}
+
+.custom-slider .awssld__bullets .awssld__bullets--active {
+  background: #c7e36b;
+}
+
+.custom-slider .awssld__controls button span::before,
+.custom-slider .awssld__controls button span::after {
+  background-color: #c7e36b;
+}
+
+@media (max-width: 768px) {
+  .custom-slider {
+    height: 260px;
+  }
+}
+
+@import "tailwindcss";
+
+@keyframes marquee {
+  from {
+    transform: translateX(0%);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 22s linear infinite;
+}
