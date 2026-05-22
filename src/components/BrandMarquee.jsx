@@ -52,12 +52,12 @@ const BrandMarquee = () => {
           <div
             key={index}
             className="
-              min-w-[220px]
-              h-[120px]
+              min-w-55
+              h-30
               rounded-3xl
               border-2
               border-[#C7E36B]/40
-              bg-gradient-to-br
+              bg-linear-to-br
               from-[#2A3322]
               via-[#232323]
               to-[#1A1A1A]

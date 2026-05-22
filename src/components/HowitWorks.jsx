@@ -65,7 +65,7 @@ const HowItWorks = () => {
               key={item.id}
               className="
                 relative
-                bg-gradient-to-br
+                bg-linear-to-br
                 from-[#263226]
                 to-[#1B1B1B]
                 rounded-3xl

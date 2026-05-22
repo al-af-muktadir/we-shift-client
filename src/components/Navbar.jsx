@@ -1,7 +1,17 @@
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import logo from "../../public/image.png";
+// import { useContext, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useContext } from "react";
 
 const Navbar = () => {
+  const { user, logOut } = useContext(AuthContext);
+  console.log(user);
+  const handlelogout = () => {
+    logOut()
+      .then((result) => console.log("loggedout", result))
+      .catch((err) => console.log(err));
+  };
   const navClass = ({ isActive }) =>
     isActive
       ? `text-[#C7E36B] underline decoration-[#C7E36B] underline-offset-8 decoration-4 font-bold `
@@ -63,9 +73,52 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-end">
-        <div className="flex gap-4">
-          {/* SIGN IN */}
+        {!user ? (
+          <div className="flex gap-4">
+            {/* SIGN IN */}
+            <Link to="/login">
+              {" "}
+              <button
+                className="
+      px-6 py-2
+      rounded-full
+      bg-[#C7E36B]
+      text-[#1E1E1E]
+      font-bold
+      border-2 border-[#C7E36B]
+      hover:bg-transparent
+      hover:text-[#C7E36B]
+      transition-all
+      duration-300
+    "
+              >
+                Sign In
+              </button>
+            </Link>
+
+            {/* SIGN UP */}
+            <Link to="/register">
+              <button
+                className="
+      px-6 py-2
+      rounded-full
+      bg-[#1E1E1E]
+      text-[#C7E36B]
+      font-bold
+      border-2 border-[#C7E36B]
+      hover:bg-[#C7E36B]
+      hover:text-[#1E1E1E]
+      transition-all
+      duration-300
+    "
+              >
+                Sign Up
+              </button>
+            </Link>
+          </div>
+        ) : (
           <button
+            onClick={handlelogout}
             className="
       px-6 py-2
       rounded-full
@@ -79,27 +132,9 @@ const Navbar = () => {
       duration-300
     "
           >
-            Sign In
+            Logout
           </button>
-
-          {/* SIGN UP */}
-          <button
-            className="
-      px-6 py-2
-      rounded-full
-      bg-[#1E1E1E]
-      text-[#C7E36B]
-      font-bold
-      border-2 border-[#C7E36B]
-      hover:bg-[#C7E36B]
-      hover:text-[#1E1E1E]
-      transition-all
-      duration-300
-    "
-          >
-            Sign Up
-          </button>
-        </div>
+        )}
       </div>
     </div>
   );

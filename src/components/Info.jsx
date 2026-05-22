@@ -32,7 +32,7 @@ const ServiceFeatures = () => {
           <div
             key={item.id}
             className="
-              bg-gradient-to-br from-[#263226] to-[#151515]
+              bg-linear-to-br from-[#263226] to-[#151515]
               border border-[#C7E36B]/20
               rounded-3xl
               p-8

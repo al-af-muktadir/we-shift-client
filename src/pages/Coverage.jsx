@@ -1,11 +1,11 @@
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useLoaderData } from "react-router";
 const Coverage = () => {
   const position = [23.685, 90.3563];
   const mapRef = useRef(null);
-  const [place, setPlace] = useState("");
+
   const data = useLoaderData();
   console.log(data);
 
