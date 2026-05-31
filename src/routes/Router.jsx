@@ -8,6 +8,11 @@ import AuthLayout from "../pages/Auth/AuthLayout";
 import PrivateRoute from "./PrivateRoute";
 import Rider from "../pages/Rider/Rider";
 import SendPercel from "../pages/SendPercel/SendPercel";
+import DashboardLayout from "../Layoutts/DashboardLayout";
+import MyParcels from "../Layoutts/MyPercel/Myparcel";
+import Payment from "../pages/Payment";
+import PaymentSuccess from "../pages/SendPercel/Payment/PaymentSuccess";
+import PaymentCancelled from "../pages/SendPercel/Payment/PaymentCancelled";
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +39,7 @@ export const router = createBrowserRouter([
             <SendPercel></SendPercel>
           </PrivateRoute>
         ),
+        loader: () => fetch("../../public/warehouses.json"),
       },
       {
         path: "/coverage",
@@ -53,6 +59,32 @@ export const router = createBrowserRouter([
       {
         path: "/register",
         Component: Register,
+      },
+    ],
+  },
+  {
+    path: "dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRoute>
+    ),
+    children: [
+      {
+        path: "my-parcel",
+        Component: MyParcels,
+      },
+      {
+        path: "payment/:parcel_id",
+        Component: Payment,
+      },
+      {
+        path: "payment-success",
+        Component: PaymentSuccess,
+      },
+      {
+        path: "payment-cancelled",
+        Component: PaymentCancelled,
       },
     ],
   },

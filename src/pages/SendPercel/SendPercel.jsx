@@ -1,15 +1,80 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
+import { useLoaderData, useNavigate } from "react-router";
 
-const SendPercel = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
-  const handlePercel = (data) => {
-    console.log(data);
+const Sendparcel = () => {
+  const navigate = useNavigate();
+  const { register, handleSubmit, control } = useForm();
+  const axiosSecure = useAxiosSecure();
+
+  //   const senderRegions = watch("senderRegion");
+  const senderRegions = useWatch({ name: "senderRegion", control });
+  const recieverRegions = useWatch({ name: "recieverRegion", control });
+  const serviceCenter = useLoaderData();
+  console.log(serviceCenter);
+  const region = serviceCenter.map((c) => c.region);
+  const regions = [...new Set(region)];
+
+  const districtbyRegion = (region) => {
+    const regionDistrict = serviceCenter.filter((c) => c.region === region);
+    const districts = regionDistrict.map((d) => d.district);
+    return districts;
   };
+
+  const handleSendParcel = (data) => {
+    console.log(data, "injs");
+
+    const isDocument = data.parcelType === "document";
+    const isSameDistrict = data.senderDistrict === data.recieverDistrict;
+    // eslint-disable-next-line no-useless-assignment
+    let cost = 0;
+    const parcelWeight = parseFloat(data.parcelWeight);
+    console.log(parcelWeight);
+    if (isDocument) {
+      cost = isSameDistrict ? 60 : 80;
+    } else {
+      if (parcelWeight < 3) {
+        cost = isSameDistrict ? 110 : 150;
+      } else {
+        const minCharge = isSameDistrict ? 110 : 150;
+        const extraWeight = parcelWeight - 3;
+        const extraCharge = isSameDistrict
+          ? extraWeight * 40
+          : extraWeight * 40 + 40;
+        // eslint-disable-next-line no-unused-vars
+        cost = minCharge + extraCharge;
+      }
+    }
+    console.log(cost);
+    data = { ...data, cost };
+    Swal.fire({
+      title: "Agree with the Cost?",
+      text: `You Will be charged with ${cost}`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.post("/parcels", data).then((res) => {
+          console.log(res.data);
+
+          if (res.data.result.insertedId) {
+            Swal.fire({
+              title: "Parcel Request has been sent",
+              text: ".",
+              icon: "success",
+            });
+            navigate("/dashboard/my-parcel");
+          }
+        });
+      }
+    });
+  };
+
   return (
     <div className=" min-h-screen py-16 px-5">
       <div
@@ -26,7 +91,7 @@ const SendPercel = () => {
     "
       >
         {/* TITLE */}
-        <form onSubmit={handleSubmit(handlePercel)}>
+        <form onSubmit={handleSubmit(handleSendParcel)}>
           <div className="mb-14">
             <h1
               className="
@@ -56,7 +121,7 @@ const SendPercel = () => {
                 type="radio"
                 name="parcelType"
                 value="document"
-                {...register("percelType")}
+                {...register("parcelType")}
                 className="
             radio
             radio-success
@@ -71,7 +136,7 @@ const SendPercel = () => {
                 type="radio"
                 name="parcelType"
                 value="non-document"
-                {...register("percelType")}
+                {...register("parcelType")}
                 className="
             radio
             radio-success
@@ -91,7 +156,7 @@ const SendPercel = () => {
 
               <input
                 type="text"
-                {...register("percel-name")}
+                {...register("parcelName")}
                 placeholder="Parcel Name"
                 className="
             mt-3
@@ -118,7 +183,7 @@ const SendPercel = () => {
               <input
                 type="text"
                 placeholder="Parcel Weight"
-                {...register("percel-weight")}
+                {...register("parcelWeight")}
                 className="
             mt-3
             w-full
@@ -157,6 +222,23 @@ const SendPercel = () => {
                   type="text"
                   placeholder="Sender Name"
                   {...register("senderName")}
+                  className="
+              w-full
+              px-5
+              py-4
+              rounded-2xl
+              bg-[#1E1E1E]
+              border
+              border-[#C7E36B]/20
+              outline-none
+              text-[#C7E36B]
+              placeholder-[#8A9A5B]
+            "
+                />
+                <input
+                  type="text"
+                  placeholder="Sender Email"
+                  {...register("senderEmail")}
                   className="
               w-full
               px-5
@@ -219,12 +301,35 @@ const SendPercel = () => {
               outline-none
               text-[#8A9A5B]
             "
+                  {...register("senderRegion")}
+                >
+                  <option>Select your Region</option>
+                  {regions.map((r, idx) => (
+                    <option key={idx} value={r}>
+                      {r}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  className="
+              w-full
+              px-5
+              py-4
+              rounded-2xl
+              bg-[#1E1E1E]
+              border
+              border-[#C7E36B]/20
+              outline-none
+              text-[#8A9A5B]
+            "
                   {...register("senderDistrict")}
                 >
                   <option>Select your District</option>
-                  <option>Dhaka</option>
-                  <option>Chittagong</option>
-                  <option>Sylhet</option>
+                  {districtbyRegion(senderRegions).map((r, idx) => (
+                    <option key={idx} value={r}>
+                      {r}
+                    </option>
+                  ))}
                 </select>
 
                 <textarea
@@ -282,6 +387,24 @@ const SendPercel = () => {
 
                 <input
                   type="text"
+                  placeholder="Reciever Email"
+                  {...register("recieverEmail")}
+                  className="
+              w-full
+              px-5
+              py-4
+              rounded-2xl
+              bg-[#1E1E1E]
+              border
+              border-[#C7E36B]/20
+              outline-none
+              text-[#C7E36B]
+              placeholder-[#8A9A5B]
+            "
+                />
+
+                <input
+                  type="text"
                   placeholder="Receiver Address"
                   {...register("recieverAddress")}
                   className="
@@ -317,6 +440,27 @@ const SendPercel = () => {
                 />
 
                 <select
+                  {...register("recieverRegion")}
+                  className="
+              w-full
+              px-5
+              py-4
+              rounded-2xl
+              bg-[#1E1E1E]
+              border
+              border-[#C7E36B]/20
+              outline-none
+              text-[#8A9A5B]
+            "
+                >
+                  <option>Select your Region</option>
+                  {regions.map((r, idx) => (
+                    <option key={idx} value={r}>
+                      {r}
+                    </option>
+                  ))}
+                </select>
+                <select
                   {...register("recieverDistrict")}
                   className="
               w-full
@@ -331,9 +475,11 @@ const SendPercel = () => {
             "
                 >
                   <option>Select your District</option>
-                  <option>Dhaka</option>
-                  <option>Chittagong</option>
-                  <option>Sylhet</option>
+                  {districtbyRegion(recieverRegions).map((r, idx) => (
+                    <option key={idx} value={r}>
+                      {r}
+                    </option>
+                  ))}
                 </select>
 
                 <textarea
@@ -385,4 +531,4 @@ const SendPercel = () => {
   );
 };
 
-export default SendPercel;
+export default Sendparcel;
