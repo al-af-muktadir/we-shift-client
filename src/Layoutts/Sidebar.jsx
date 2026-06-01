@@ -1,8 +1,10 @@
 import { NavLink } from "react-router";
+import useRole from "../hooks/useRole";
 // import logo from "../../public/image.png";
 // import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
+  const { role } = useRole();
   return (
     <aside className="w-72 bg-[#111111] border-r border-gray-800 min-h-screen">
       <div className="p-6">
@@ -37,6 +39,46 @@ const Sidebar = () => {
         >
           Settings
         </NavLink>
+        {role === "admin" && (
+          <>
+            <NavLink
+              to="/dashboard/approve-rider"
+              className={({ isActive }) =>
+                `block rounded-xl px-4 py-3 transition ${
+                  isActive
+                    ? "bg-[#C7E36B] text-black font-semibold"
+                    : "text-gray-300 hover:bg-gray-900"
+                }`
+              }
+            >
+              Approve Riders
+            </NavLink>
+            <NavLink
+              to="/dashboard/manage-user"
+              className={({ isActive }) =>
+                `block rounded-xl px-4 py-3 transition ${
+                  isActive
+                    ? "bg-[#C7E36B] text-black font-semibold"
+                    : "text-gray-300 hover:bg-gray-900"
+                }`
+              }
+            >
+              Manage Users
+            </NavLink>
+            <NavLink
+              to="/dashboard/assign-rider"
+              className={({ isActive }) =>
+                `block rounded-xl px-4 py-3 transition ${
+                  isActive
+                    ? "bg-[#C7E36B] text-black font-semibold"
+                    : "text-gray-300 hover:bg-gray-900"
+                }`
+              }
+            >
+              Assign Rider
+            </NavLink>
+          </>
+        )}
       </nav>
     </aside>
   );

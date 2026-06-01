@@ -13,6 +13,10 @@ import MyParcels from "../Layoutts/MyPercel/Myparcel";
 import Payment from "../pages/Payment";
 import PaymentSuccess from "../pages/SendPercel/Payment/PaymentSuccess";
 import PaymentCancelled from "../pages/SendPercel/Payment/PaymentCancelled";
+import ApproveRider from "../pages/Rider/ApproveRider";
+import ManageUser from "../pages/User/ManageUser";
+import AdminRoute from "./AdminRoute";
+import AssignRider from "../pages/Rider/AssignRider";
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +35,7 @@ export const router = createBrowserRouter([
             <Rider></Rider>
           </PrivateRoute>
         ),
+        loader: () => fetch("../../public/warehouses.json"),
       },
       {
         path: "send-percel",
@@ -81,6 +86,26 @@ export const router = createBrowserRouter([
       {
         path: "payment-success",
         Component: PaymentSuccess,
+      },
+      {
+        path: "payment-cancelled",
+        Component: PaymentCancelled,
+      },
+      {
+        path: "approve-rider",
+        element: (
+          <AdminRoute>
+            <ApproveRider></ApproveRider>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "manage-user",
+        element: <ManageUser></ManageUser>,
+      },
+      {
+        path: "assign-rider",
+        element: <AssignRider></AssignRider>,
       },
       {
         path: "payment-cancelled",

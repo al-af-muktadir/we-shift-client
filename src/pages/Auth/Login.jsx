@@ -5,11 +5,13 @@ import { FaCross, FaEnvelope, FaLock } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../../context/AuthContext";
 import { FcGoogle } from "react-icons/fc";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Login = () => {
   const [see, setSee] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
   const { signInUser, signInwithGoogle } = useContext(AuthContext);
   const {
     register,
@@ -31,6 +33,15 @@ const Login = () => {
       .then((result) => {
         console.log(result);
         navigate(location.state || "/");
+        const userInfo = {
+          email: result.user?.email,
+          displayName: result.user?.displayName,
+          photoURL: result.user?.photoURL,
+        };
+        console.log("sociallogi", userInfo);
+        axiosSecure
+          .post("/users", userInfo)
+          .then((res) => console.log(res.data, "in login soical  page"));
       })
       .catch((err) => console.log(err));
   };

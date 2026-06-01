@@ -5,12 +5,14 @@ import { FaCross, FaEnvelope, FaLock, FaUser } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Register = () => {
   const { registerUser, updateUser } = useContext(AuthContext);
   const [image, setImage] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
   const {
     register,
     handleSubmit,
@@ -39,7 +41,16 @@ const Register = () => {
           )
           .then((res) => {
             console.log(res.data);
-
+            const userInfo = {
+              email: data.email,
+              displayName: data.name,
+              photoURL: res.data.data.url,
+            };
+            axiosSecure.post("/users", userInfo).then((res) => {
+              if (res.data.insertedId) {
+                console.log("Userinserted into Db");
+              }
+            });
             const userProfile = {
               displayName: data.name,
               photoURL: res.data.data.url,
