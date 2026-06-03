@@ -10,7 +10,9 @@ const Payment = () => {
   const { data: parcel, isLoading } = useQuery({
     queryKey: ["parcel", parcel_id],
     queryFn: async () => {
-      const res = await axios.get(`http://localhost:3000/parcels/${parcel_id}`);
+      const res = await axios.get(
+        `https://we-shift-server.vercel.app/parcels/${parcel_id}`,
+      );
 
       return res.data;
     },

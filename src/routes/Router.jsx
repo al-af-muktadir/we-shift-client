@@ -21,6 +21,7 @@ import AssignedDeliveries from "../pages/Rider/AssignedDeliveries";
 import UserRiderRoute from "./UserRiderRoute";
 import RiderRoutes from "./RiderRoutes";
 import TrackParcel from "../pages/TrackParcel/TrackParcel";
+import DelivaryStats from "../pages/DelivaryStats";
 
 export const router = createBrowserRouter([
   {
@@ -86,6 +87,14 @@ export const router = createBrowserRouter([
       {
         path: "my-parcel",
         Component: MyParcels,
+      },
+      {
+        path: "stats",
+        element: (
+          <AdminRoute>
+            <DelivaryStats></DelivaryStats>
+          </AdminRoute>
+        ),
       },
       {
         path: "payment/:parcel_id",
