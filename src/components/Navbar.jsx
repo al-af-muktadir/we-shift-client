@@ -3,9 +3,11 @@ import logo from "../../public/image.png";
 // import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
+import useRole from "../hooks/useRole";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
+  const { role } = useRole();
   console.log(user);
   const handlelogout = () => {
     logOut()
@@ -36,6 +38,11 @@ const Navbar = () => {
       <NavLink to="/contact" className={navClass}>
         <li>Contact</li>
       </NavLink>
+      {role !== "admin" && (
+        <NavLink to="/rider" className={navClass}>
+          <li>Be a Rider</li>
+        </NavLink>
+      )}
     </>
   );
   return (

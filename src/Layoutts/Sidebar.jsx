@@ -79,6 +79,22 @@ const Sidebar = () => {
             </NavLink>
           </>
         )}
+        {role === "rider" && (
+          <>
+            <NavLink
+              to="/dashboard/assigned-deliveries"
+              className={({ isActive }) =>
+                `block rounded-xl px-4 py-3 transition ${
+                  isActive
+                    ? "bg-[#C7E36B] text-black font-semibold"
+                    : "text-gray-300 hover:bg-gray-900"
+                }`
+              }
+            >
+              Assigned Deliveries
+            </NavLink>
+          </>
+        )}
       </nav>
     </aside>
   );

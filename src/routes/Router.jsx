@@ -17,6 +17,10 @@ import ApproveRider from "../pages/Rider/ApproveRider";
 import ManageUser from "../pages/User/ManageUser";
 import AdminRoute from "./AdminRoute";
 import AssignRider from "../pages/Rider/AssignRider";
+import AssignedDeliveries from "../pages/Rider/AssignedDeliveries";
+import UserRiderRoute from "./UserRiderRoute";
+import RiderRoutes from "./RiderRoutes";
+import TrackParcel from "../pages/TrackParcel/TrackParcel";
 
 export const router = createBrowserRouter([
   {
@@ -31,9 +35,9 @@ export const router = createBrowserRouter([
       {
         path: "rider",
         element: (
-          <PrivateRoute>
+          <UserRiderRoute>
             <Rider></Rider>
-          </PrivateRoute>
+          </UserRiderRoute>
         ),
         loader: () => fetch("../../public/warehouses.json"),
       },
@@ -50,6 +54,10 @@ export const router = createBrowserRouter([
         path: "/coverage",
         Component: Coverage,
         loader: () => fetch("../../public/warehouses.json"),
+      },
+      {
+        path: "/track-parcel/:trackingId",
+        Component: TrackParcel,
       },
     ],
   },
@@ -106,6 +114,15 @@ export const router = createBrowserRouter([
       {
         path: "assign-rider",
         element: <AssignRider></AssignRider>,
+      },
+      {
+        path: "assigned-deliveries",
+        element: (
+          <RiderRoutes>
+            {" "}
+            <AssignedDeliveries />
+          </RiderRoutes>
+        ),
       },
       {
         path: "payment-cancelled",

@@ -6,9 +6,12 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../../context/AuthContext";
 import { FcGoogle } from "react-icons/fc";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useRole from "../../hooks/useRole";
 
 const Login = () => {
   const [see, setSee] = useState(false);
+  const { loading } = useContext(AuthContext);
+  const { role, isLoading, refetch } = useRole();
   const location = useLocation();
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
@@ -31,17 +34,32 @@ const Login = () => {
   const handleGoogle = () => {
     signInwithGoogle()
       .then((result) => {
+        refetch();
+
         console.log(result);
-        navigate(location.state || "/");
+
         const userInfo = {
           email: result.user?.email,
           displayName: result.user?.displayName,
           photoURL: result.user?.photoURL,
         };
         console.log("sociallogi", userInfo);
-        axiosSecure
-          .post("/users", userInfo)
-          .then((res) => console.log(res.data, "in login soical  page"));
+        axiosSecure.post("/users", userInfo).then((res) => {
+          console.log(res.data, "in login soical  page");
+
+          if (loading || isLoading) {
+            <span>Loading</span>;
+          }
+          axiosSecure.get(`/users/${result.user.email}/role`).then((res) => {
+            console.log(res.data);
+            if (res.data.role !== "admin") {
+              console.log(role, location.state);
+              navigate(location.state || "/");
+            } else {
+              navigate("/");
+            }
+          });
+        });
       })
       .catch((err) => console.log(err));
   };

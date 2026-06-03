@@ -3,8 +3,11 @@ import { useLoaderData, useNavigate } from "react-router";
 
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 const Sendparcel = () => {
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const { register, handleSubmit, control } = useForm();
   const axiosSecure = useAxiosSecure();
@@ -238,6 +241,7 @@ const Sendparcel = () => {
                 <input
                   type="text"
                   placeholder="Sender Email"
+                  defaultValue={user.email}
                   {...register("senderEmail")}
                   className="
               w-full

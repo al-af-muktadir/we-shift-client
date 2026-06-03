@@ -2,22 +2,29 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { HiUserAdd } from "react-icons/hi";
 import { useRef, useState } from "react";
+import Swal from "sweetalert2";
 
 const AssignRider = () => {
   const axiosSecure = useAxiosSecure();
   const modalRef = useRef(null);
   const [selectedParcel, setSelectedParcel] = useState(null);
 
-  const { isLoading, data: parcels = [] } = useQuery({
+  const {
+    isLoading,
+    data: parcels = [],
+    refetch: parcelRefetch,
+  } = useQuery({
     queryKey: ["parcels", "pending-pickup"],
     queryFn: async () => {
-      const result = await axiosSecure.get(
-        "/parcels?deliveryStatus=pending-pickup",
-      );
+      const result = await axiosSecure.get("/parcels");
       return result.data.data;
     },
   });
-  const { data: riders = [], isLoading: ridersLoading } = useQuery({
+  const {
+    data: riders = [],
+    isLoading: ridersLoading,
+    refetch: riderRefetch,
+  } = useQuery({
     queryKey: ["riders", selectedParcel?.senderDistrict, "available"],
 
     enabled: !!selectedParcel,
@@ -46,7 +53,28 @@ const AssignRider = () => {
     console.log("Selected Parcel:", selectedParcel);
     console.log("Selected Rider:", rider);
 
-    // later you will PATCH backend here
+    const riderAssignInfo = {
+      riderId: rider._id,
+      riderEmail: rider.email,
+      riderName: rider.name,
+      parcelId: selectedParcel._id,
+      trackingId: selectedParcel.trackingId,
+    };
+    axiosSecure
+      .patch(`/parcels/${selectedParcel._id}`, riderAssignInfo)
+      .then((res) => {
+        if (res.data.modifiedCount) {
+          modalRef.current.close();
+          parcelRefetch();
+          riderRefetch();
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Rider has been assigned",
+            timer: 3000,
+          });
+        }
+      });
   };
 
   return (
@@ -237,7 +265,7 @@ const AssignRider = () => {
                 whitespace-nowrap
               "
                   >
-                    Assign
+                    Find
                   </button>
                 </div>
               ))}

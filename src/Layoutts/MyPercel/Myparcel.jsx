@@ -85,7 +85,14 @@ const MyParcels = () => {
 
               {/* Tracking */}
               <td className="px-6 py-5 text-gray-300">
-                #{parcel._id.toString().slice(-6).toUpperCase()}
+                {parcel.trackingId ? (
+                  <Link to={`/track-parcel/${parcel.trackingId}`}>
+                    {" "}
+                    {parcel.trackingId}
+                  </Link>
+                ) : (
+                  <span>-</span>
+                )}
               </td>
 
               {/* Payment */}
