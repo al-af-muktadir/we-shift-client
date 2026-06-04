@@ -22,6 +22,7 @@ import UserRiderRoute from "./UserRiderRoute";
 import RiderRoutes from "./RiderRoutes";
 import TrackParcel from "../pages/TrackParcel/TrackParcel";
 import DelivaryStats from "../pages/DelivaryStats";
+import DashboardHome from "../Layoutts/DashboardHome";
 
 export const router = createBrowserRouter([
   {
@@ -85,6 +86,10 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
+        index: true,
+        Component: DashboardHome,
+      },
+      {
         path: "my-parcel",
         Component: MyParcels,
       },
@@ -118,11 +123,19 @@ export const router = createBrowserRouter([
       },
       {
         path: "manage-user",
-        element: <ManageUser></ManageUser>,
+        element: (
+          <AdminRoute>
+            <ManageUser></ManageUser>
+          </AdminRoute>
+        ),
       },
       {
         path: "assign-rider",
-        element: <AssignRider></AssignRider>,
+        element: (
+          <AdminRoute>
+            <AssignRider></AssignRider>
+          </AdminRoute>
+        ),
       },
       {
         path: "assigned-deliveries",

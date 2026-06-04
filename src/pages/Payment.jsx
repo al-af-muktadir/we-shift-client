@@ -20,14 +20,34 @@ const Payment = () => {
   console.log(parcel);
   const handlePayment = async () => {
     const paymentInfo = {
-      cost: parcel.cost,
-      parcel_id: parcel._id,
-      senderEmail: parcel.senderEmail,
-      parcelName: parcel.parcelName,
+      cost: parcel?.cost,
+      parcel_id: parcel?._id,
+      senderEmail: parcel?.senderEmail,
+      parcelName: parcel?.parcelName,
     };
-    const res = await axiosSecure.post("/create-checkout-session", paymentInfo);
-    console.log(res.data);
-    window.location.href = res.data.url;
+
+    console.log("PARCEL FROM DB:", parcel);
+    console.log("PAYMENT INFO SENDING:", paymentInfo);
+
+    try {
+      const res = await axiosSecure.post(
+        "/create-checkout-session",
+        paymentInfo,
+      );
+      console.log("STRIPE SESSION RESPONSE:", res.data);
+
+      if (res.data?.url) {
+        window.location.href = res.data.url;
+      } else {
+        alert("No Stripe URL returned from server");
+      }
+    } catch (err) {
+      console.log("FULL PAYMENT ERROR:", err);
+      console.log("SERVER ERROR DATA:", err.response?.data);
+      console.log("SERVER ERROR STATUS:", err.response?.status);
+
+      alert(err.response?.data?.message || "Payment failed");
+    }
   };
 
   if (isLoading) {

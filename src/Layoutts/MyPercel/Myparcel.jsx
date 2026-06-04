@@ -36,10 +36,6 @@ const MyParcels = () => {
             <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">
               Payment Info
             </th>
-
-            <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">
-              Action
-            </th>
           </tr>
         </thead>
 
@@ -113,11 +109,6 @@ const MyParcels = () => {
               </td>
 
               {/* Action */}
-              <td className="px-6 py-5">
-                <button className="px-5 py-2 rounded-lg bg-[#C7E36B] text-black font-medium hover:opacity-90">
-                  View
-                </button>
-              </td>
             </tr>
           ))}
         </tbody>

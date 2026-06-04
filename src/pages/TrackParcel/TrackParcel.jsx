@@ -15,9 +15,10 @@ const TrackParcel = () => {
     },
   });
 
+  console.log(trackings);
   const steps = [
     {
-      key: "pennding_pickup",
+      key: "pending_pickup",
       label: "Pending Pickup",
     },
     {

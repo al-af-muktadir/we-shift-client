@@ -15,6 +15,20 @@ const Sidebar = () => {
 
       <nav className="px-4 space-y-2">
         <NavLink
+          to="/dashboard"
+          end
+          className={({ isActive }) =>
+            `block rounded-xl px-4 py-3 transition ${
+              isActive
+                ? "bg-[#C7E36B] text-black font-semibold"
+                : "text-gray-300 hover:bg-gray-900"
+            }`
+          }
+        >
+          Profile
+        </NavLink>
+
+        <NavLink
           to="/dashboard/my-parcel"
           className={({ isActive }) =>
             `block rounded-xl px-4 py-3 transition ${
@@ -25,19 +39,6 @@ const Sidebar = () => {
           }
         >
           My Parcels
-        </NavLink>
-
-        <NavLink
-          to="/dashboard/settings"
-          className={({ isActive }) =>
-            `block rounded-xl px-4 py-3 transition ${
-              isActive
-                ? "bg-[#C7E36B] text-black font-semibold"
-                : "text-gray-300 hover:bg-gray-900"
-            }`
-          }
-        >
-          Settings
         </NavLink>
         {role === "admin" && (
           <>

@@ -3,6 +3,8 @@ import logo from "../../../../../Zap-shift-Resources/assets/agent-pending.png";
 import { useLoaderData } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 const Rider = () => {
   const {
@@ -11,6 +13,7 @@ const Rider = () => {
     formState: { errors },
     control,
   } = useForm();
+  const { user } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
   const serviceCenter = useLoaderData();
   const region = serviceCenter.map((c) => c.region);
@@ -106,6 +109,8 @@ const Rider = () => {
               <input
                 {...register("email")}
                 type="email"
+                defaultValue={user?.email}
+                disabled
                 placeholder="Your Email"
                 className="w-full mt-2 px-4 py-3 rounded-xl bg-[#1E1E1E] border border-gray-700 focus:border-[#C7E36B] outline-none text-white"
               />

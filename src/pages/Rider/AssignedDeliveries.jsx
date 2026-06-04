@@ -191,7 +191,7 @@ const AssignedDeliveries = () => {
                       onClick={() => handleCashout(parcel)}
                       className="px-3 py-2 rounded-xl bg-[#C7E36B] text-[#1E1E1E] text-sm font-bold hover:scale-105 transition"
                     >
-                      💰 Cash Out
+                      💰 Cash Out (under Development !!!)
                     </button>
                   ) : (
                     <span className="text-[#8A9A5B] text-sm">Pending</span>

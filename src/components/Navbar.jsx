@@ -38,6 +38,11 @@ const Navbar = () => {
       <NavLink to="/contact" className={navClass}>
         <li>Contact</li>
       </NavLink>
+      {user && (
+        <NavLink to="/dashboard" className={navClass}>
+          <li>dashboard</li>
+        </NavLink>
+      )}
       {role !== "admin" && (
         <NavLink to="/rider" className={navClass}>
           <li>Be a Rider</li>
